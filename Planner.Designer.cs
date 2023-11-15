@@ -37,6 +37,7 @@
             taskTextBox = new TextBox();
             taskDescriptionTextBox = new TextBox();
             dueDatePicker = new DateTimePicker();
+            errorLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)taskGridView).BeginInit();
             SuspendLayout();
             // 
@@ -115,16 +116,26 @@
             // 
             // dueDatePicker
             // 
-            dueDatePicker.Location = new Point(510, 310);
+            dueDatePicker.Location = new Point(510, 281);
             dueDatePicker.Name = "dueDatePicker";
             dueDatePicker.Size = new Size(278, 23);
             dueDatePicker.TabIndex = 5;
+            // 
+            // errorLabel
+            // 
+            errorLabel.AutoSize = true;
+            errorLabel.ForeColor = Color.Red;
+            errorLabel.Location = new Point(571, 417);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(0, 15);
+            errorLabel.TabIndex = 6;
             // 
             // Planner
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(errorLabel);
             Controls.Add(dueDatePicker);
             Controls.Add(taskDescriptionTextBox);
             Controls.Add(taskTextBox);
@@ -151,5 +162,6 @@
         private TextBox taskTextBox;
         private TextBox taskDescriptionTextBox;
         private DateTimePicker dueDatePicker;
+        private Label errorLabel;
     }
 }

@@ -40,11 +40,11 @@ namespace Planner.Data
 
             return table;
         }
-        public void AddDataToCsv(TaskModel task)
+        public ReturnModel AddDataToCsv(TaskModel task)
         {
             if (!File.Exists(filePath))
             {
-                throw new Exception("Data File does not exist");
+                return new ReturnModel() { Code = 2, Message = "Error fetching CSV file" }; 
             }
 
             var lines = File.ReadAllLines(filePath);
@@ -56,20 +56,21 @@ namespace Planner.Data
                 newLines.Add(line);
                 if (line.Contains(task.Task)) 
                 {
-                    //TODO - implement error label notification
-                    throw new Exception("duplicate task subject not allowed");
+                    return new ReturnModel() { 
+                        Code = 1, 
+                        Message = "Duplicate task subject not allowed" 
+                    };
                 }
             }
-
             newLines.Add(output);
             File.WriteAllLines(filePath, newLines);
-
+            return new ReturnModel() { Code = 0 };
         }
-        public void DeleteDataFromCsv(TaskModel task)
+        public ReturnModel DeleteDataFromCsv(TaskModel task)
         {
             if (!File.Exists(filePath))
             {
-                throw new Exception("Data File does not exist");
+                return new ReturnModel() { Code = 2, Message = "Error fetching CSV file" };
             }
             var newLines = new List<string>();
             var lines = File.ReadAllLines(filePath);
@@ -81,10 +82,11 @@ namespace Planner.Data
                 }
             }
             File.WriteAllLines(filePath, newLines);
+            return new ReturnModel() { Code = 0 };
         }
-        public void MarkDataComplete(int rowIndex) 
+        public ReturnModel MarkDataComplete(TaskModel task) 
         {
-        
+            return new ReturnModel() { Code = 0 };
         }
 
     }

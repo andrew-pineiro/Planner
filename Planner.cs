@@ -60,13 +60,28 @@ namespace Planner
         {
             TaskModel task = new TaskModel()
             {
-                //TODO - implement error label notification
-                Task = taskTextBox.Text ?? throw new Exception("Task is required"),
+                Task = taskTextBox.Text ?? string.Empty,
                 DueDate = dueDatePicker.Value,
                 TaskDescription = taskDescriptionTextBox.Text ?? string.Empty
             };
+            if(string.IsNullOrEmpty(task.Task))
+            {
+                updateErrorMessage("Task name is required");
+                return;
+            }
 
-            _lib.AddDataToCsv(task);
+            var returnVal = _lib.AddDataToCsv(task);
+
+            if(returnVal.Code == 1) 
+            {
+                updateErrorMessage(returnVal.Message!);
+                return;
+            } else if(returnVal.Code == 2)
+            {
+                throw new Exception(returnVal.Message);
+            }
+
+            removeErrorMessage();
             loadDataTable();
         }
 
@@ -83,7 +98,7 @@ namespace Planner
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            foreach(DataGridViewRow row in taskGridView.SelectedRows)
+            foreach (DataGridViewRow row in taskGridView.SelectedRows)
             {
                 TaskModel task = new TaskModel()
                 {
@@ -96,7 +111,14 @@ namespace Planner
 
             loadDataTable();
         }
-
+        private void updateErrorMessage(string message)
+        {
+            errorLabel.Text = message;
+        }
+        private void removeErrorMessage()
+        {
+            errorLabel.Text = string.Empty;
+        }
         private void loadButton_Click(object sender, EventArgs e)
         {
             //TODO - implement load functionality

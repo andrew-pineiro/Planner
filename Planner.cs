@@ -1,4 +1,5 @@
 using Planner.Data;
+using Planner.Data.Models;
 using System.Configuration;
 using System.Data;
 
@@ -56,7 +57,24 @@ namespace Planner
             taskGridView.DataSource = _lib.LoadTableData();
             taskGridView.Refresh();
         }
-        private void addButton_Click(object sender, EventArgs e)
+        private void updateErrorMessage(string message)
+        {
+            errorLabel.Text = message;
+        }
+        private void removeErrorMessage()
+        {
+            errorLabel.Text = string.Empty;
+        }
+
+        private void resetTextBoxes()
+        {
+            taskDescriptionTextBox.Text = "Description";
+            taskDescriptionTextBox.ForeColor = Color.Gray;
+            taskTextBox.Text = "Task Subject";
+            taskTextBox.ForeColor = Color.Gray;
+            taskTextBox.ReadOnly = false;
+        }
+        private void saveButton_Click(object sender, EventArgs e)
         {
             TaskModel task = new TaskModel()
             {
@@ -64,35 +82,55 @@ namespace Planner
                 DueDate = dueDatePicker.Value,
                 TaskDescription = taskDescriptionTextBox.Text ?? string.Empty
             };
-            if(string.IsNullOrEmpty(task.Task))
+            if (string.IsNullOrEmpty(task.Task))
             {
                 updateErrorMessage("Task name is required");
                 return;
             }
 
-            var returnVal = _lib.AddDataToCsv(task);
+            var returnVal = _lib.SaveDataToCsv(task, taskTextBox.ReadOnly);
 
-            if(returnVal.Code == 1) 
+            if (returnVal.Code == 1)
             {
                 updateErrorMessage(returnVal.Message!);
                 return;
-            } else if(returnVal.Code == 2)
+            }
+            else if (returnVal.Code == 2)
             {
                 throw new Exception(returnVal.Message);
             }
 
             removeErrorMessage();
+            resetTextBoxes();
             loadDataTable();
         }
 
         private void completeButton_Click(object sender, EventArgs e)
         {
-            int index = taskGridView.CurrentRow.Index;
-            if (index < 0)
+            foreach (DataGridViewRow row in taskGridView.SelectedRows)
             {
-                throw new Exception("no row selected");
+                DateTime.TryParse(row.Cells[1].Value.ToString(), out DateTime dueDate);
+                TaskModel task = new TaskModel()
+                {
+                    Task = row.Cells[0].Value.ToString()!,
+                    DueDate = dueDate,
+                    TaskDescription = row.Cells[2].Value.ToString() ?? string.Empty,
+                };
+
+
+                var returnVal = _lib.MarkDataComplete(task);
+                if (returnVal.Code == 1)
+                {
+                    updateErrorMessage(returnVal.Message!);
+                    return;
+                }
+                else if (returnVal.Code == 2)
+                {
+                    throw new Exception(returnVal.Message);
+                }
+
             }
-            _lib.MarkDataComplete(index);
+            removeErrorMessage();
             loadDataTable();
         }
 
@@ -102,26 +140,44 @@ namespace Planner
             {
                 TaskModel task = new TaskModel()
                 {
-                    //TODO - implement error label notification
-                    Task = row.Cells[0].Value.ToString() ?? throw new Exception("error"),
+                    Task = row.Cells[0].Value.ToString()!
                 };
 
-                _lib.DeleteDataFromCsv(task);
+                var returnVal = _lib.DeleteDataFromCsv(task);
+                if (returnVal.Code == 1)
+                {
+                    updateErrorMessage(returnVal.Message!);
+                    return;
+                }
+                else if (returnVal.Code == 2)
+                {
+                    throw new Exception(returnVal.Message);
+                }
             }
-
+            removeErrorMessage();
+            resetTextBoxes();
             loadDataTable();
         }
-        private void updateErrorMessage(string message)
-        {
-            errorLabel.Text = message;
-        }
-        private void removeErrorMessage()
-        {
-            errorLabel.Text = string.Empty;
-        }
+
         private void loadButton_Click(object sender, EventArgs e)
         {
-            //TODO - implement load functionality
+            if (taskGridView.SelectedRows.Count < 1)
+            {
+                return;
+            }
+            
+            DataGridViewRow row = taskGridView.SelectedRows[0];
+
+            taskTextBox.Text = row.Cells[0].Value.ToString() ?? string.Empty;
+            taskTextBox.ForeColor = Color.Black;
+            taskTextBox.ReadOnly = true;
+
+            DateTime.TryParse(row.Cells[1].Value.ToString() ?? string.Empty, out DateTime dateVal);
+            dueDatePicker.Value = dateVal;
+
+            taskDescriptionTextBox.Text = row.Cells[2].Value.ToString() ?? string.Empty;
+            taskDescriptionTextBox.ForeColor = Color.Black;
+            taskDescriptionTextBox.Focus();
         }
     }
 }

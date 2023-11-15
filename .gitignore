@@ -363,7 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Custom
-.logs/*
-.config/*
-Properties/*
-appsettings.*
+App.Config
+resources/*

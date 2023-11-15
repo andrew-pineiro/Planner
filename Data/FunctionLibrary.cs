@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Planner.Data.Models;
 
 namespace Planner.Data
 {
@@ -15,13 +16,26 @@ namespace Planner.Data
         public DataTable LoadTableData()
         {
             DataTable table = new DataTable();
+            
+            // check if file exists
             if (!File.Exists(filePath))
             {
-                throw new Exception("Data File does not exist");
+                File.WriteAllLines(
+                    filePath, 
+                    new string[] { "Task,Due Date,Task Description,Completed" }
+                    );
             }
+
+            // populate data table
             using (StreamReader reader = new StreamReader(filePath))
             {
                 var headers = reader.ReadLine()!.Split(',');
+
+                if (headers[0] != "Task")
+                {
+                    throw new Exception("Unexpected headers in CSV.");
+                }
+
                 foreach (var header in headers)
                 {
                     table.Columns.Add(header);
@@ -34,33 +48,37 @@ namespace Planner.Data
                     {
                         row[i] = rows[i];
                     }
-                    table.Rows.Add(row);
+                    if (row["Completed"].ToString() == "0")
+                    {
+                        table.Rows.Add(row);
+                    }
+
                 }
+                table.Columns.Remove("Completed");
+                table.DefaultView.Sort = $"{headers[1]} desc";
             }
 
             return table;
         }
-        public ReturnModel AddDataToCsv(TaskModel task)
+        public ReturnModel SaveDataToCsv(TaskModel task, bool saveTask)
         {
-            if (!File.Exists(filePath))
-            {
-                return new ReturnModel() { Code = 2, Message = "Error fetching CSV file" }; 
-            }
 
             var lines = File.ReadAllLines(filePath);
             var newLines = new List<string>();
-            var output = $"{task.Task},{task.DueDate},{task.TaskDescription}";
+            var output = $"{task.Task},{task.DueDate},{task.TaskDescription},0";
 
             foreach (var line in lines)
             {
-                newLines.Add(line);
-                if (line.Contains(task.Task)) 
+                if(line.StartsWith(task.Task) && !saveTask)
                 {
-                    return new ReturnModel() { 
-                        Code = 1, 
-                        Message = "Duplicate task subject not allowed" 
-                    };
+                    return new ReturnModel() { Code = 1, Message = "Duplicate task name" };
                 }
+
+                if(!line.StartsWith(task.Task))
+                {
+                    newLines.Add(line);
+                }
+                
             }
             newLines.Add(output);
             File.WriteAllLines(filePath, newLines);
@@ -68,15 +86,11 @@ namespace Planner.Data
         }
         public ReturnModel DeleteDataFromCsv(TaskModel task)
         {
-            if (!File.Exists(filePath))
-            {
-                return new ReturnModel() { Code = 2, Message = "Error fetching CSV file" };
-            }
             var newLines = new List<string>();
             var lines = File.ReadAllLines(filePath);
-            foreach(var line in lines)
+            foreach (var line in lines)
             {
-                if(!line.Contains(task.Task))
+                if (!line.Contains(task.Task))
                 {
                     newLines.Add(line);
                 }
@@ -86,6 +100,18 @@ namespace Planner.Data
         }
         public ReturnModel MarkDataComplete(TaskModel task) 
         {
+            var newLines = new List<string>();
+            var lines = File.ReadAllLines(filePath);
+            var output = $"{task.Task},{task.DueDate},{task.TaskDescription},1";
+
+            foreach (var line in lines)
+            {
+                if(!line.StartsWith(task.Task)) {
+                    newLines.Add(line);
+                }
+            }
+            newLines.Add(output);
+            File.WriteAllLines(filePath, newLines);
             return new ReturnModel() { Code = 0 };
         }
 

@@ -33,7 +33,7 @@
             completeButton = new Button();
             deleteButton = new Button();
             loadButton = new Button();
-            addButton = new Button();
+            saveButton = new Button();
             taskTextBox = new TextBox();
             taskDescriptionTextBox = new TextBox();
             dueDatePicker = new DateTimePicker();
@@ -43,11 +43,16 @@
             // 
             // taskGridView
             // 
+            taskGridView.AllowUserToAddRows = false;
+            taskGridView.AllowUserToDeleteRows = false;
+            taskGridView.AllowUserToResizeRows = false;
             taskGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             taskGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             taskGridView.Location = new Point(12, 12);
             taskGridView.Name = "taskGridView";
             taskGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            taskGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            taskGridView.ShowEditingIcon = false;
             taskGridView.Size = new Size(481, 246);
             taskGridView.TabIndex = 0;
             // 
@@ -63,33 +68,33 @@
             // 
             // deleteButton
             // 
-            deleteButton.Location = new Point(510, 126);
+            deleteButton.Location = new Point(510, 177);
             deleteButton.Name = "deleteButton";
             deleteButton.Size = new Size(278, 23);
             deleteButton.TabIndex = 1;
-            deleteButton.Text = "Delete Task";
+            deleteButton.Text = "Delete";
             deleteButton.UseVisualStyleBackColor = true;
             deleteButton.Click += deleteButton_Click;
             // 
             // loadButton
             // 
-            loadButton.Location = new Point(510, 166);
+            loadButton.Location = new Point(510, 206);
             loadButton.Name = "loadButton";
             loadButton.Size = new Size(278, 23);
             loadButton.TabIndex = 1;
-            loadButton.Text = "Load Task";
+            loadButton.Text = "Load";
             loadButton.UseVisualStyleBackColor = true;
             loadButton.Click += loadButton_Click;
             // 
-            // addButton
+            // saveButton
             // 
-            addButton.Location = new Point(510, 235);
-            addButton.Name = "addButton";
-            addButton.Size = new Size(278, 23);
-            addButton.TabIndex = 1;
-            addButton.Text = "Add Task";
-            addButton.UseVisualStyleBackColor = true;
-            addButton.Click += addButton_Click;
+            saveButton.Location = new Point(510, 235);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(278, 23);
+            saveButton.TabIndex = 1;
+            saveButton.Text = "Save";
+            saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += saveButton_Click;
             // 
             // taskTextBox
             // 
@@ -139,7 +144,7 @@
             Controls.Add(dueDatePicker);
             Controls.Add(taskDescriptionTextBox);
             Controls.Add(taskTextBox);
-            Controls.Add(addButton);
+            Controls.Add(saveButton);
             Controls.Add(loadButton);
             Controls.Add(deleteButton);
             Controls.Add(completeButton);
@@ -158,7 +163,7 @@
         private Button completeButton;
         private Button deleteButton;
         private Button loadButton;
-        private Button addButton;
+        private Button saveButton;
         private TextBox taskTextBox;
         private TextBox taskDescriptionTextBox;
         private DateTimePicker dueDatePicker;

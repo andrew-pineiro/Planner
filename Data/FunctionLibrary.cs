@@ -17,10 +17,10 @@ namespace Planner.Data
         {
             DataTable table = new DataTable();
 
-            if (!Directory.Exists(filePath))
+            string folderPath = filePath.Substring(0, filePath.LastIndexOf('\\'));
+            if (!Directory.Exists(folderPath))
             {
-
-                Directory.CreateDirectory(filePath.Substring(0,filePath.LastIndexOf('\\')));
+                Directory.CreateDirectory(folderPath);
             }
 
             // check if file exists
@@ -62,7 +62,7 @@ namespace Planner.Data
 
                 }
                 table.Columns.Remove("Completed");
-                table.DefaultView.Sort = $"{headers[1]} desc";
+                table.DefaultView.Sort = $"{headers[1]} asc";
             }
 
             return table;

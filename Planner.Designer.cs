@@ -55,6 +55,7 @@
             taskGridView.ShowEditingIcon = false;
             taskGridView.Size = new Size(481, 246);
             taskGridView.TabIndex = 0;
+            taskGridView.DoubleClick += taskGridView_DoubleClick;
             // 
             // completeButton
             // 

@@ -179,5 +179,10 @@ namespace Planner
             taskDescriptionTextBox.ForeColor = Color.Black;
             taskDescriptionTextBox.Focus();
         }
+
+        private void taskGridView_DoubleClick(object sender, EventArgs e)
+        {
+            loadButton_Click(sender, e);
+        }
     }
 }

@@ -11,15 +11,22 @@ namespace Planner.Data
 {
     public class FunctionLibrary
     {
-        private readonly string filePath =
-            ConfigurationManager.AppSettings["dataFile"] ?? throw new Exception("Unable to find dataFile in App.Config");
+        string filePath =>
+            Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["dataFile"] ?? throw new Exception("Unable to find dataFile in App.Config"));
         public DataTable LoadTableData()
         {
             DataTable table = new DataTable();
-            
+
+            if (!Directory.Exists(filePath))
+            {
+
+                Directory.CreateDirectory(filePath.Substring(0,filePath.LastIndexOf('\\')));
+            }
+
             // check if file exists
             if (!File.Exists(filePath))
             {
+
                 File.WriteAllLines(
                     filePath, 
                     new string[] { "Task,Due Date,Task Description,Completed" }

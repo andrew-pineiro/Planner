@@ -121,8 +121,11 @@
             // 
             // dueDatePicker
             // 
+            dueDatePicker.CustomFormat = "MM/dd/yyyy hh:mm tt";
+            dueDatePicker.Format = DateTimePickerFormat.Custom;
             dueDatePicker.Location = new Point(510, 281);
             dueDatePicker.Name = "dueDatePicker";
+            dueDatePicker.RightToLeft = RightToLeft.No;
             dueDatePicker.Size = new Size(278, 23);
             dueDatePicker.TabIndex = 5;
             // 

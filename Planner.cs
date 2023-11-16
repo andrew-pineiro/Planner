@@ -82,7 +82,7 @@ namespace Planner
                 DueDate = dueDatePicker.Value,
                 TaskDescription = taskDescriptionTextBox.Text ?? string.Empty
             };
-            if (string.IsNullOrEmpty(task.Task))
+            if (string.IsNullOrEmpty(task.Task) || task.Task == "Task Subject")
             {
                 updateErrorMessage("Task name is required");
                 return;
@@ -165,7 +165,7 @@ namespace Planner
             {
                 return;
             }
-            
+
             DataGridViewRow row = taskGridView.SelectedRows[0];
 
             taskTextBox.Text = row.Cells[0].Value.ToString() ?? string.Empty;

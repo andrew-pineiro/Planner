@@ -8,19 +8,15 @@ namespace Planner
 {
     public partial class Planner : Form
     {
-        private FunctionLibrary _lib;
         public Planner()
         {
             InitializeComponent();
 
-            FunctionLibrary lib = new();
-            _lib = lib;
-
             // Load Data Source From CSV
-            loadDataTable();
+            LoadDataTable();
         }
 
-        private void taskTextBox_Enter(object sender, EventArgs e)
+        private void TaskTextBox_Enter(object sender, EventArgs e)
         {
             if (taskTextBox.Text == "Task Subject")
             {
@@ -28,7 +24,7 @@ namespace Planner
                 taskTextBox.ForeColor = Color.Black;
             }
         }
-        private void taskTextBox_Leave(object sender, EventArgs e)
+        private void TaskTextBox_Leave(object sender, EventArgs e)
         {
             if (taskTextBox.Text == string.Empty)
             {
@@ -36,7 +32,7 @@ namespace Planner
                 taskTextBox.ForeColor = Color.Gray;
             }
         }
-        private void taskDescriptionTextBox_Enter(object sender, EventArgs e)
+        private void TaskDescriptionTextBox_Enter(object sender, EventArgs e)
         {
             if (taskDescriptionTextBox.Text == "Description")
             {
@@ -44,7 +40,7 @@ namespace Planner
                 taskDescriptionTextBox.ForeColor = Color.Black;
             }
         }
-        private void taskDescriptionTextBox_Leave(object sender, EventArgs e)
+        private void TaskDescriptionTextBox_Leave(object sender, EventArgs e)
         {
             if (taskDescriptionTextBox.Text == string.Empty)
             {
@@ -52,11 +48,11 @@ namespace Planner
                 taskDescriptionTextBox.ForeColor = Color.Gray;
             }
         }
-        private void loadDataTable()
+        private void LoadDataTable()
         {
             try
             {
-                taskGridView.DataSource = _lib.LoadTableData();
+                taskGridView.DataSource = FunctionLibrary.LoadTableData();
                 taskGridView.Refresh();
             } catch (Exception e)
             {
@@ -64,15 +60,15 @@ namespace Planner
             }
 
         }
-        private void updateErrorMessage(string message)
+        private void UpdateErrorMessage(string message)
         {
             errorLabel.Text = message;
         }
-        private void removeErrorMessage()
+        private void RemoveErrorMessage()
         {
             errorLabel.Text = string.Empty;
         }
-        private void resetTextBoxes()
+        private void ResetTextBoxes()
         {
             taskDescriptionTextBox.Text = "Description";
             taskDescriptionTextBox.ForeColor = Color.Gray;
@@ -81,20 +77,20 @@ namespace Planner
             taskTextBox.ReadOnly = false;
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
-            TaskModel task = new TaskModel()
+            TaskModel task = new()
             {
                 Task = taskTextBox.Text ?? string.Empty,
                 DueDate = dueDatePicker.Value,
                 TaskDescription = taskDescriptionTextBox.Text ?? string.Empty
             };
 
-            var returnVal = _lib.SaveDataToCsv(task, taskTextBox.ReadOnly);
+            var returnVal = FunctionLibrary.SaveDataToCsv(task, taskTextBox.ReadOnly);
 
             if (returnVal.ReturnCode == Code.ERROR)
             {
-                updateErrorMessage(returnVal.Message!);
+                UpdateErrorMessage(returnVal.Message!);
                 return;
             }
             else if (returnVal.ReturnCode == Code.CRITICAL)
@@ -102,17 +98,20 @@ namespace Planner
                 throw new Exception(returnVal.Message);
             }
 
-            removeErrorMessage();
-            resetTextBoxes();
-            loadDataTable();
+            RemoveErrorMessage();
+            ResetTextBoxes();
+            LoadDataTable();
         }
 
-        private void completeButton_Click(object sender, EventArgs e)
+        private void CompleteButton_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in taskGridView.SelectedRows)
             {
-                DateTime.TryParse(row.Cells[1].Value.ToString(), out DateTime dueDate);
-                TaskModel task = new TaskModel()
+                if(!DateTime.TryParse(row.Cells[1].Value.ToString(), out DateTime dueDate))
+                {
+                    return;
+                }
+                TaskModel task = new()
                 {
                     Task = row.Cells[0].Value.ToString()!,
                     DueDate = dueDate,
@@ -120,10 +119,10 @@ namespace Planner
                 };
 
 
-                var returnVal = _lib.MarkDataComplete(task);
+                var returnVal = FunctionLibrary.MarkDataComplete(task);
                 if (returnVal.ReturnCode == Code.ERROR)
                 {
-                    updateErrorMessage(returnVal.Message!);
+                    UpdateErrorMessage(returnVal.Message!);
                     return;
                 }
                 else if (returnVal.ReturnCode == Code.CRITICAL)
@@ -132,23 +131,23 @@ namespace Planner
                 }
 
             }
-            removeErrorMessage();
-            loadDataTable();
+            RemoveErrorMessage();
+            LoadDataTable();
         }
 
-        private void deleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in taskGridView.SelectedRows)
             {
-                TaskModel task = new TaskModel()
+                TaskModel task = new()
                 {
                     Task = row.Cells[0].Value.ToString()!
                 };
 
-                var returnVal = _lib.DeleteDataFromCsv(task);
+                var returnVal = FunctionLibrary.DeleteDataFromCsv(task);
                 if (returnVal.ReturnCode == Code.ERROR)
                 {
-                    updateErrorMessage(returnVal.Message!);
+                    UpdateErrorMessage(returnVal.Message!);
                     return;
                 }
                 else if (returnVal.ReturnCode == Code.CRITICAL)
@@ -156,12 +155,12 @@ namespace Planner
                     throw new Exception(returnVal.Message);
                 }
             }
-            removeErrorMessage();
-            resetTextBoxes();
-            loadDataTable();
+            RemoveErrorMessage();
+            ResetTextBoxes();
+            LoadDataTable();
         }
 
-        private void loadButton_Click(object sender, EventArgs e)
+        private void LoadButton_Click(object sender, EventArgs e)
         {
             if (taskGridView.SelectedRows.Count < 1)
             {
@@ -174,7 +173,10 @@ namespace Planner
             taskTextBox.ForeColor = Color.Black;
             taskTextBox.ReadOnly = true;
 
-            DateTime.TryParse(row.Cells[1].Value.ToString() ?? string.Empty, out DateTime dateVal);
+            if(!DateTime.TryParse(row.Cells[1].Value.ToString() ?? string.Empty, out DateTime dateVal))
+            {
+                return;
+            }
             dueDatePicker.Value = dateVal;
 
             taskDescriptionTextBox.Text = row.Cells[2].Value.ToString() ?? string.Empty;
@@ -182,9 +184,9 @@ namespace Planner
             taskDescriptionTextBox.Focus();
         }
 
-        private void taskGridView_DoubleClick(object sender, EventArgs e)
+        private void TaskGridView_DoubleClick(object sender, EventArgs e)
         {
-            loadButton_Click(sender, e);
+            LoadButton_Click(sender, e);
         }
     }
 }

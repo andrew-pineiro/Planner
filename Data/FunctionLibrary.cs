@@ -10,33 +10,35 @@ using static Planner.Data.Models.ReturnModel;
 
 namespace Planner.Data
 {
-    public class FunctionLibrary
+    public static class FunctionLibrary
     {
-        string filePath =>
-            Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["dataFile"] 
-                ?? throw new Exception("Unable to find dataFile in App.Config"));
-        public DataTable LoadTableData()
+        private static string FilePath =>
+            Environment.ExpandEnvironmentVariables(
+                ConfigurationManager.AppSettings["dataFile"] 
+                    ?? throw new Exception("Unable to find dataFile in App.Config")
+                );
+        public static DataTable LoadTableData()
         {
-            DataTable table = new DataTable();
+            DataTable table = new();
 
-            string folderPath = filePath.Substring(0, filePath.LastIndexOf('\\'));
+            string folderPath = FilePath[..FilePath.LastIndexOf('\\')];
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
             // check if file exists
-            if (!File.Exists(filePath))
+            if (!File.Exists(FilePath))
             {
 
                 File.WriteAllLines(
-                    filePath, 
+                    FilePath, 
                     new string[] { "Task,Due Date,Task Description,Completed" }
                     );
             }
 
             // populate data table
-            using (StreamReader reader = new StreamReader(filePath))
+            using (StreamReader reader = new(FilePath))
             {
                 var headers = reader.ReadLine()!.Split(',');
 
@@ -70,13 +72,13 @@ namespace Planner.Data
 
             return table;
         }
-        public ReturnModel SaveDataToCsv(TaskModel task, bool saveTask)
+        public static ReturnModel SaveDataToCsv(TaskModel task, bool saveTask)
         {
             char[] invalidChars = { ',','@' };
             var newLines = new List<string>();
 
             // Read in all lines
-            var lines = File.ReadAllLines(filePath);
+            var lines = File.ReadAllLines(FilePath);
 
             // Check for blank task name
             if (string.IsNullOrEmpty(task.Task) || task.Task == "Task Subject")
@@ -126,15 +128,15 @@ namespace Planner.Data
 
             // Adds new/updated line to list and writes to file
             newLines.Add($"{task.Task},{task.DueDate},{task.TaskDescription},0");
-            File.WriteAllLines(filePath, newLines);
+            File.WriteAllLines(FilePath, newLines);
 
 
             return new ReturnModel() { ReturnCode = Code.OK };
         }
-        public ReturnModel DeleteDataFromCsv(TaskModel task)
+        public static ReturnModel DeleteDataFromCsv(TaskModel task)
         {
             var newLines = new List<string>();
-            var lines = File.ReadAllLines(filePath);
+            var lines = File.ReadAllLines(FilePath);
             foreach (var line in lines)
             {
                 if (!line.Contains(task.Task))
@@ -142,13 +144,13 @@ namespace Planner.Data
                     newLines.Add(line);
                 }
             }
-            File.WriteAllLines(filePath, newLines);
+            File.WriteAllLines(FilePath, newLines);
             return new ReturnModel() { ReturnCode = Code.OK };
         }
-        public ReturnModel MarkDataComplete(TaskModel task) 
+        public static ReturnModel MarkDataComplete(TaskModel task) 
         {
             var newLines = new List<string>();
-            var lines = File.ReadAllLines(filePath);
+            var lines = File.ReadAllLines(FilePath);
 
             if (!string.IsNullOrEmpty(task.TaskDescription))
             {
@@ -163,7 +165,7 @@ namespace Planner.Data
             }
 
             newLines.Add($"{task.Task},{task.DueDate},{task.TaskDescription},1");
-            File.WriteAllLines(filePath, newLines);
+            File.WriteAllLines(FilePath, newLines);
 
             return new ReturnModel() { ReturnCode = Code.OK };
         }

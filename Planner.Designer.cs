@@ -55,7 +55,7 @@
             taskGridView.ShowEditingIcon = false;
             taskGridView.Size = new Size(481, 246);
             taskGridView.TabIndex = 0;
-            taskGridView.DoubleClick += taskGridView_DoubleClick;
+            taskGridView.DoubleClick += TaskGridView_DoubleClick;
             // 
             // completeButton
             // 
@@ -65,7 +65,7 @@
             completeButton.TabIndex = 1;
             completeButton.Text = "Complete Task";
             completeButton.UseVisualStyleBackColor = true;
-            completeButton.Click += completeButton_Click;
+            completeButton.Click += CompleteButton_Click;
             // 
             // deleteButton
             // 
@@ -75,7 +75,7 @@
             deleteButton.TabIndex = 1;
             deleteButton.Text = "Delete";
             deleteButton.UseVisualStyleBackColor = true;
-            deleteButton.Click += deleteButton_Click;
+            deleteButton.Click += DeleteButton_Click;
             // 
             // loadButton
             // 
@@ -85,7 +85,7 @@
             loadButton.TabIndex = 1;
             loadButton.Text = "Load";
             loadButton.UseVisualStyleBackColor = true;
-            loadButton.Click += loadButton_Click;
+            loadButton.Click += LoadButton_Click;
             // 
             // saveButton
             // 
@@ -95,7 +95,7 @@
             saveButton.TabIndex = 1;
             saveButton.Text = "Save";
             saveButton.UseVisualStyleBackColor = true;
-            saveButton.Click += saveButton_Click;
+            saveButton.Click += SaveButton_Click;
             // 
             // taskTextBox
             // 
@@ -105,8 +105,8 @@
             taskTextBox.Size = new Size(481, 23);
             taskTextBox.TabIndex = 2;
             taskTextBox.Text = "Task Subject";
-            taskTextBox.Enter += taskTextBox_Enter;
-            taskTextBox.Leave += taskTextBox_Leave;
+            taskTextBox.Enter += TaskTextBox_Enter;
+            taskTextBox.Leave += TaskTextBox_Leave;
             // 
             // taskDescriptionTextBox
             // 
@@ -117,8 +117,8 @@
             taskDescriptionTextBox.Size = new Size(481, 122);
             taskDescriptionTextBox.TabIndex = 3;
             taskDescriptionTextBox.Text = "Description";
-            taskDescriptionTextBox.Enter += taskDescriptionTextBox_Enter;
-            taskDescriptionTextBox.Leave += taskDescriptionTextBox_Leave;
+            taskDescriptionTextBox.Enter += TaskDescriptionTextBox_Enter;
+            taskDescriptionTextBox.Leave += TaskDescriptionTextBox_Leave;
             // 
             // dueDatePicker
             // 

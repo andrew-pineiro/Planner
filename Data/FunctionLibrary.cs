@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Planner.Data.Models;
+using static Planner.Data.Models.ReturnModel;
 
 namespace Planner.Data
 {
     public class FunctionLibrary
     {
         string filePath =>
-            Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["dataFile"] ?? throw new Exception("Unable to find dataFile in App.Config"));
+            Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["dataFile"] 
+                ?? throw new Exception("Unable to find dataFile in App.Config"));
         public DataTable LoadTableData()
         {
             DataTable table = new DataTable();
@@ -53,7 +55,8 @@ namespace Planner.Data
                     DataRow row = table.NewRow();
                     for (int i = 0; i < headers.Length; i++)
                     {
-                        row[i] = rows[i];
+                        
+                        row[i] = rows[i].Replace("**",Environment.NewLine);
                     }
                     if (row["Completed"].ToString() == "0")
                     {
@@ -69,27 +72,64 @@ namespace Planner.Data
         }
         public ReturnModel SaveDataToCsv(TaskModel task, bool saveTask)
         {
-
-            var lines = File.ReadAllLines(filePath);
+            char[] invalidChars = { ',','@' };
             var newLines = new List<string>();
-            var output = $"{task.Task},{task.DueDate},{task.TaskDescription},0";
 
+            // Read in all lines
+            var lines = File.ReadAllLines(filePath);
+
+            // Check for blank task name
+            if (string.IsNullOrEmpty(task.Task) || task.Task == "Task Subject")
+            {
+                return new ReturnModel() { 
+                    ReturnCode = Code.ERROR, 
+                    Message = "Task name is required" 
+                };
+            }
+
+            // Check for new line characters and replace with ** if present
+            if (!string.IsNullOrEmpty(task.TaskDescription))
+            {
+                task.TaskDescription = task.TaskDescription.Replace(Environment.NewLine, "**");
+            }
+
+            // Check for any invalid characters present in task subject or description
+            if ((!string.IsNullOrEmpty(task.TaskDescription) 
+                    && task.TaskDescription.IndexOfAny(invalidChars) > -1) 
+                        || task.Task.IndexOfAny(invalidChars) > -1)
+            {
+                return new ReturnModel() { 
+                    ReturnCode = Code.ERROR, 
+                    Message = "Invalid character present." 
+                };
+            }
+
+            // Iterate through each lines in file
             foreach (var line in lines)
             {
+                // Checks for duplicate task name, only if this is a new task being added
                 if(line.StartsWith(task.Task) && !saveTask)
                 {
-                    return new ReturnModel() { Code = 1, Message = "Duplicate task name" };
+                    return new ReturnModel() { 
+                        ReturnCode = Code.ERROR, 
+                        Message = "Duplicate task name" 
+                    };
                 }
 
+                // Adds all other lines besides effected line to list
                 if(!line.StartsWith(task.Task))
                 {
                     newLines.Add(line);
                 }
                 
             }
-            newLines.Add(output);
+
+            // Adds new/updated line to list and writes to file
+            newLines.Add($"{task.Task},{task.DueDate},{task.TaskDescription},0");
             File.WriteAllLines(filePath, newLines);
-            return new ReturnModel() { Code = 0 };
+
+
+            return new ReturnModel() { ReturnCode = Code.OK };
         }
         public ReturnModel DeleteDataFromCsv(TaskModel task)
         {
@@ -103,13 +143,17 @@ namespace Planner.Data
                 }
             }
             File.WriteAllLines(filePath, newLines);
-            return new ReturnModel() { Code = 0 };
+            return new ReturnModel() { ReturnCode = Code.OK };
         }
         public ReturnModel MarkDataComplete(TaskModel task) 
         {
             var newLines = new List<string>();
             var lines = File.ReadAllLines(filePath);
-            var output = $"{task.Task},{task.DueDate},{task.TaskDescription},1";
+
+            if (!string.IsNullOrEmpty(task.TaskDescription))
+            {
+                task.TaskDescription = task.TaskDescription.Replace(Environment.NewLine, "**");
+            }
 
             foreach (var line in lines)
             {
@@ -117,9 +161,11 @@ namespace Planner.Data
                     newLines.Add(line);
                 }
             }
-            newLines.Add(output);
+
+            newLines.Add($"{task.Task},{task.DueDate},{task.TaskDescription},1");
             File.WriteAllLines(filePath, newLines);
-            return new ReturnModel() { Code = 0 };
+
+            return new ReturnModel() { ReturnCode = Code.OK };
         }
 
     }

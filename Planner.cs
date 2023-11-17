@@ -2,6 +2,7 @@ using Planner.Data;
 using Planner.Data.Models;
 using System.Configuration;
 using System.Data;
+using static Planner.Data.Models.ReturnModel;
 
 namespace Planner
 {
@@ -43,7 +44,6 @@ namespace Planner
                 taskDescriptionTextBox.ForeColor = Color.Black;
             }
         }
-
         private void taskDescriptionTextBox_Leave(object sender, EventArgs e)
         {
             if (taskDescriptionTextBox.Text == string.Empty)
@@ -54,8 +54,15 @@ namespace Planner
         }
         private void loadDataTable()
         {
-            taskGridView.DataSource = _lib.LoadTableData();
-            taskGridView.Refresh();
+            try
+            {
+                taskGridView.DataSource = _lib.LoadTableData();
+                taskGridView.Refresh();
+            } catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
         private void updateErrorMessage(string message)
         {
@@ -65,7 +72,6 @@ namespace Planner
         {
             errorLabel.Text = string.Empty;
         }
-
         private void resetTextBoxes()
         {
             taskDescriptionTextBox.Text = "Description";
@@ -74,6 +80,7 @@ namespace Planner
             taskTextBox.ForeColor = Color.Gray;
             taskTextBox.ReadOnly = false;
         }
+
         private void saveButton_Click(object sender, EventArgs e)
         {
             TaskModel task = new TaskModel()
@@ -82,20 +89,15 @@ namespace Planner
                 DueDate = dueDatePicker.Value,
                 TaskDescription = taskDescriptionTextBox.Text ?? string.Empty
             };
-            if (string.IsNullOrEmpty(task.Task) || task.Task == "Task Subject")
-            {
-                updateErrorMessage("Task name is required");
-                return;
-            }
 
             var returnVal = _lib.SaveDataToCsv(task, taskTextBox.ReadOnly);
 
-            if (returnVal.Code == 1)
+            if (returnVal.ReturnCode == Code.ERROR)
             {
                 updateErrorMessage(returnVal.Message!);
                 return;
             }
-            else if (returnVal.Code == 2)
+            else if (returnVal.ReturnCode == Code.CRITICAL)
             {
                 throw new Exception(returnVal.Message);
             }
@@ -119,12 +121,12 @@ namespace Planner
 
 
                 var returnVal = _lib.MarkDataComplete(task);
-                if (returnVal.Code == 1)
+                if (returnVal.ReturnCode == Code.ERROR)
                 {
                     updateErrorMessage(returnVal.Message!);
                     return;
                 }
-                else if (returnVal.Code == 2)
+                else if (returnVal.ReturnCode == Code.CRITICAL)
                 {
                     throw new Exception(returnVal.Message);
                 }
@@ -144,12 +146,12 @@ namespace Planner
                 };
 
                 var returnVal = _lib.DeleteDataFromCsv(task);
-                if (returnVal.Code == 1)
+                if (returnVal.ReturnCode == Code.ERROR)
                 {
                     updateErrorMessage(returnVal.Message!);
                     return;
                 }
-                else if (returnVal.Code == 2)
+                else if (returnVal.ReturnCode == Code.CRITICAL)
                 {
                     throw new Exception(returnVal.Message);
                 }

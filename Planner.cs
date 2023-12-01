@@ -1,7 +1,5 @@
 using Planner.Data;
 using Planner.Data.Models;
-using System.Configuration;
-using System.Data;
 using static Planner.Data.Models.ReturnModel;
 
 namespace Planner
@@ -11,8 +9,6 @@ namespace Planner
         public Planner()
         {
             InitializeComponent();
-
-            // Load Data Source From CSV
             LoadDataTable();
         }
 

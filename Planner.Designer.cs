@@ -70,7 +70,7 @@
             // 
             // deleteButton
             // 
-            deleteButton.Location = new Point(510, 177);
+            deleteButton.Location = new Point(510, 206);
             deleteButton.Name = "deleteButton";
             deleteButton.Size = new Size(278, 23);
             deleteButton.TabIndex = 1;
@@ -90,9 +90,9 @@
             // 
             // saveButton
             // 
-            saveButton.Location = new Point(510, 235);
+            saveButton.Location = new Point(510, 79);
             saveButton.Name = "saveButton";
-            saveButton.Size = new Size(278, 23);
+            saveButton.Size = new Size(278, 54);
             saveButton.TabIndex = 1;
             saveButton.Text = "Save";
             saveButton.UseVisualStyleBackColor = true;
@@ -168,7 +168,7 @@
         private DataGridView taskGridView;
         private Button completeButton;
         private Button deleteButton;
-        private Button loadButton;
+        private Button clearButton;
         private Button saveButton;
         private TextBox taskTextBox;
         private TextBox taskDescriptionTextBox;

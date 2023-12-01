@@ -1,4 +1,4 @@
-namespace Planner.Data.Models
+﻿namespace Planner.Data.Models
 {
     public class TaskModel
     {

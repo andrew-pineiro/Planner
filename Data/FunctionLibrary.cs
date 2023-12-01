@@ -138,7 +138,7 @@ namespace Planner.Data
             var lines = File.ReadAllLines(FilePath);
             foreach (var line in lines)
             {
-                if (!line.Contains(task.Task))
+                if (!line.StartsWith(task.Task))
                 {
                     newLines.Add(line);
                 }

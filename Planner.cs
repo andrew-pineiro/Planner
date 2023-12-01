@@ -84,7 +84,8 @@ namespace Planner
             {
                 Task = taskTextBox.Text ?? string.Empty,
                 DueDate = dueDatePicker.Value,
-                TaskDescription = taskDescriptionTextBox.Text ?? string.Empty
+                TaskDescription = taskDescriptionTextBox.Text != "Description" 
+                                    ? taskDescriptionTextBox.Text : string.Empty
             };
 
             var returnVal = FunctionLibrary.SaveDataToCsv(task, taskTextBox.ReadOnly);

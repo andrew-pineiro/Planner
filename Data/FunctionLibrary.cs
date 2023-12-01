@@ -74,7 +74,7 @@ namespace Planner.Data
         }
         public static ReturnModel SaveDataToCsv(TaskModel task, bool saveTask)
         {
-            char[] invalidChars = { ',','@' };
+            char[] invalidChars = { '@', '\\', '/', ',' };
             var newLines = new List<string>();
 
             // Read in all lines
@@ -89,10 +89,14 @@ namespace Planner.Data
                 };
             }
 
+            // Replace commas with semi-colons due to data being comma seperated
+            task.Task = task.Task.Replace(',', ';');
+
             // Check for new line characters and replace with ** if present
+            // Also replaces commas with semi-colons due to data being comma seperated, if present.
             if (!string.IsNullOrEmpty(task.TaskDescription))
             {
-                task.TaskDescription = task.TaskDescription.Replace(Environment.NewLine, "**");
+                task.TaskDescription = task.TaskDescription.Replace(Environment.NewLine, "**").Replace(',',';');
             }
 
             // Check for any invalid characters present in task subject or description
@@ -127,7 +131,7 @@ namespace Planner.Data
             }
 
             // Adds new/updated line to list and writes to file
-            newLines.Add($"{task.Task},{task.DueDate},{task.TaskDescription},0");
+            newLines.Add($"{task.Task.Replace(',',';')},{task.DueDate},{task.TaskDescription},0");
             File.WriteAllLines(FilePath, newLines);
 
 

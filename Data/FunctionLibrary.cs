@@ -192,15 +192,20 @@ namespace Planner.Data
         
         public static void CleanupCSVBackups(string backupDirectory)
         {
-            foreach (var file in Directory.GetFiles(backupDirectory))
+            if (int.TryParse(ConfigurationManager.AppSettings["purgeMonths"], out int months))
             {
-                // Purge backup files older than 6 months
-                if (File.GetCreationTime(file) < DateTime.Now.AddMonths(-6))
+                foreach (var file in Directory.GetFiles(backupDirectory))
                 {
-                    File.Delete(file);
+                    // Purge backup files older than 6 months
+                    if (File.GetCreationTime(file) < DateTime.Now.AddMonths(months * -1))
+                    {
+                        File.Delete(file);
+                    }
                 }
+            } else
+            {
+                throw new Exception("error in purgeMonths App.Config data");
             }
         }
-
     }
 }

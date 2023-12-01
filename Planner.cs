@@ -185,8 +185,9 @@ namespace Planner
         }
 
         private void TaskGridView_DoubleClick(object sender, EventArgs e)
+        private void Planner_FormClosing(object sender, FormClosingEventArgs e)
         {
-            LoadButton_Click(sender, e);
+            FunctionLibrary.BackupCSVFile();
         }
     }
 }

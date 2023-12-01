@@ -173,6 +173,39 @@ namespace Planner.Data
 
             return new ReturnModel() { ReturnCode = Code.OK };
         }
+        public static void BackupCSVFile()
+        {
+            string currDate = DateTime.Now.Date.ToString("yyyyMMdd");
+            string backupDirectory = $"{FilePath[..FilePath.LastIndexOf('\\')]}\\backup";
+            string newFileName = $"{backupDirectory}\\data_{currDate}.csv";
+
+            var data = File.ReadAllLines(FilePath);
+
+            if (!Directory.Exists(backupDirectory))
+            {
+                Directory.CreateDirectory(backupDirectory);
+            }
+
+            if (File.Exists(newFileName))
+            {
+                File.Delete(newFileName);
+            }
+
+            File.WriteAllLines(newFileName, data);
+            CleanupCSVBackups(backupDirectory);
+        }
+        
+        public static void CleanupCSVBackups(string backupDirectory)
+        {
+            foreach (var file in Directory.GetFiles(backupDirectory))
+            {
+                // Purge backup files older than 6 months
+                if (File.GetCreationTime(file) < DateTime.Now.AddMonths(-6))
+                {
+                    File.Delete(file);
+                }
+            }
+        }
 
     }
 }

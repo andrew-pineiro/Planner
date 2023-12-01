@@ -32,7 +32,7 @@
             taskGridView = new DataGridView();
             completeButton = new Button();
             deleteButton = new Button();
-            loadButton = new Button();
+            clearButton = new Button();
             saveButton = new Button();
             taskTextBox = new TextBox();
             taskDescriptionTextBox = new TextBox();
@@ -48,6 +48,7 @@
             taskGridView.AllowUserToResizeRows = false;
             taskGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             taskGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            taskGridView.EditMode = DataGridViewEditMode.EditProgrammatically;
             taskGridView.Location = new Point(12, 12);
             taskGridView.Name = "taskGridView";
             taskGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -55,7 +56,7 @@
             taskGridView.ShowEditingIcon = false;
             taskGridView.Size = new Size(481, 246);
             taskGridView.TabIndex = 0;
-            taskGridView.DoubleClick += TaskGridView_DoubleClick;
+            taskGridView.Click += TaskGridView_Click;
             // 
             // completeButton
             // 
@@ -77,15 +78,15 @@
             deleteButton.UseVisualStyleBackColor = true;
             deleteButton.Click += DeleteButton_Click;
             // 
-            // loadButton
+            // clearButton
             // 
-            loadButton.Location = new Point(510, 206);
-            loadButton.Name = "loadButton";
-            loadButton.Size = new Size(278, 23);
-            loadButton.TabIndex = 1;
-            loadButton.Text = "Load";
-            loadButton.UseVisualStyleBackColor = true;
-            loadButton.Click += LoadButton_Click;
+            clearButton.Location = new Point(510, 235);
+            clearButton.Name = "clearButton";
+            clearButton.Size = new Size(278, 23);
+            clearButton.TabIndex = 1;
+            clearButton.Text = "Clear";
+            clearButton.UseVisualStyleBackColor = true;
+            clearButton.Click += ClearButton_Click;
             // 
             // saveButton
             // 
@@ -149,7 +150,7 @@
             Controls.Add(taskDescriptionTextBox);
             Controls.Add(taskTextBox);
             Controls.Add(saveButton);
-            Controls.Add(loadButton);
+            Controls.Add(clearButton);
             Controls.Add(deleteButton);
             Controls.Add(completeButton);
             Controls.Add(taskGridView);

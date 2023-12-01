@@ -161,7 +161,7 @@ namespace Planner
             LoadDataTable();
         }
 
-        private void LoadButton_Click(object sender, EventArgs e)
+        private void TaskGridView_Click(object sender, EventArgs e)
         {
             if (taskGridView.SelectedRows.Count < 1)
             {
@@ -185,7 +185,12 @@ namespace Planner
             taskDescriptionTextBox.Focus();
         }
 
-        private void TaskGridView_DoubleClick(object sender, EventArgs e)
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            ResetTextBoxes();
+            dueDatePicker.Value = DateTime.Now;
+        }
+
         private void Planner_FormClosing(object sender, FormClosingEventArgs e)
         {
             FunctionLibrary.BackupCSVFile();

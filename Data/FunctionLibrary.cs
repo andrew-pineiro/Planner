@@ -44,7 +44,7 @@ namespace Planner.Data
 
                 if (headers[0] != "Task")
                 {
-                    throw new Exception("Unexpected headers in CSV.");
+                    throw new Exception("Unexpected headers in CSV");
                 }
 
                 foreach (var header in headers)
@@ -106,7 +106,7 @@ namespace Planner.Data
             {
                 return new ReturnModel() { 
                     ReturnCode = Code.ERROR, 
-                    Message = "Invalid character present." 
+                    Message = "Invalid character present" 
                 };
             }
 

@@ -156,6 +156,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Planner";
             Text = "Planner";
+            FormClosing += Planner_FormClosing;
             ((System.ComponentModel.ISupportInitialize)taskGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

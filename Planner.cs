@@ -54,7 +54,8 @@ namespace Planner
             {
                 taskGridView.DataSource = FunctionLibrary.LoadTableData();
                 taskGridView.Refresh();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
@@ -107,7 +108,7 @@ namespace Planner
         {
             foreach (DataGridViewRow row in taskGridView.SelectedRows)
             {
-                if(!DateTime.TryParse(row.Cells[1].Value.ToString(), out DateTime dueDate))
+                if (!DateTime.TryParse(row.Cells[1].Value.ToString(), out DateTime dueDate))
                 {
                     return;
                 }
@@ -173,7 +174,7 @@ namespace Planner
             taskTextBox.ForeColor = Color.Black;
             taskTextBox.ReadOnly = true;
 
-            if(!DateTime.TryParse(row.Cells[1].Value.ToString() ?? string.Empty, out DateTime dateVal))
+            if (!DateTime.TryParse(row.Cells[1].Value.ToString() ?? string.Empty, out DateTime dateVal))
             {
                 return;
             }

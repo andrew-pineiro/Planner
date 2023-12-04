@@ -1,4 +1,4 @@
-﻿namespace Planner
+﻿namespace Planner.UI
 {
     partial class Planner
     {

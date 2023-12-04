@@ -2,7 +2,7 @@ using Planner.Data;
 using Planner.Data.Models;
 using static Planner.Data.Models.ReturnModel;
 
-namespace Planner
+namespace Planner.UI
 {
     public partial class Planner : Form
     {

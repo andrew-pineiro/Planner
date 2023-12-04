@@ -364,4 +364,4 @@ FodyWeavers.xsd
 
 # Custom
 App.Config
-Resources/
+Resources/*.csv

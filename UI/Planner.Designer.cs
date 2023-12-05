@@ -154,6 +154,7 @@
             Controls.Add(deleteButton);
             Controls.Add(completeButton);
             Controls.Add(taskGridView);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Planner";
             Text = "Planner";

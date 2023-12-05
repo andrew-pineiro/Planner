@@ -80,7 +80,7 @@ namespace Planner.UI
             {
                 Task = taskTextBox.Text ?? string.Empty,
                 DueDate = dueDatePicker.Value,
-                TaskDescription = taskDescriptionTextBox.Text != "Description" 
+                TaskDescription = taskDescriptionTextBox.Text != "Description"
                                     ? taskDescriptionTextBox.Text : string.Empty
             };
 

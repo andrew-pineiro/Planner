@@ -1,4 +1,5 @@
 # Planner
+[![.NET Core Desktop](https://github.com/andrew-pineiro/Planner/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/andrew-pineiro/Planner/actions/workflows/dotnet-desktop.yml)
 
 ## Summary
 Simple planning of your daily schedule all in one application with very little overhead. Stores data in a `.csv` file, which is specified in the configuration.

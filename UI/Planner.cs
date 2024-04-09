@@ -130,6 +130,7 @@ namespace Planner.UI
 
             }
             RemoveErrorMessage();
+            ResetTextBoxes();
             LoadDataTable();
         }
 

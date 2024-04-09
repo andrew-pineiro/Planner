@@ -139,6 +139,7 @@
             errorLabel.Name = "errorLabel";
             errorLabel.Size = new Size(0, 15);
             errorLabel.TabIndex = 6;
+            errorLabel.UseMnemonic = false;
             // 
             // Planner
             // 

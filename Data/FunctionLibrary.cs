@@ -69,7 +69,7 @@ namespace Planner.Data
         }
         public static ReturnModel SaveDataToCsv(TaskModel task, bool saveTask)
         {
-            char[] invalidChars = { '@', '\\', '/', ',' };
+            char[] invalidChars = { '@', '\\', '/', ',', '&' };
             var newLines = new List<string>();
 
             // Read in all lines
@@ -95,13 +95,17 @@ namespace Planner.Data
             }
 
             // Check for any invalid characters present in task subject or description
-            if ((!string.IsNullOrEmpty(task.TaskDescription) 
-                    && task.TaskDescription.IndexOfAny(invalidChars) > -1) 
-                        || task.Task.IndexOfAny(invalidChars) > -1)
+            
+            int titleIndex = task.Task.IndexOfAny(invalidChars);
+            int descIndex = !string.IsNullOrEmpty(task.TaskDescription) 
+                                ? task.TaskDescription.IndexOfAny(invalidChars) : -1;
+
+            if (titleIndex > -1 || descIndex > -1)
             {
+                var invalidChar = titleIndex > -1 ? task.Task[titleIndex] : task.TaskDescription![descIndex];
                 return new ReturnModel() { 
                     ReturnCode = Code.ERROR, 
-                    Message = "Invalid character present" 
+                    Message = $"Invalid character present: {invalidChar}" 
                 };
             }
 

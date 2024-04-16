@@ -130,7 +130,7 @@ namespace Planner.Data
             }
 
             // Adds new/updated line to list and writes to file
-            newLines.Add($"{task.Task.Replace(',',';')},{task.DueDate.ToString("MM/dd/yyyy hh:mm tt")},{task.TaskDescription},0");
+            newLines.Add($"{task.Task.Replace(',',';')},{task.DueDate.ToString("MM/dd/yyyy")},{task.TaskDescription},0");
             File.WriteAllLines(FilePath, newLines);
 
 

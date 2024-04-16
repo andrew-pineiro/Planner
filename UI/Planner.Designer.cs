@@ -51,6 +51,7 @@
             taskGridView.EditMode = DataGridViewEditMode.EditProgrammatically;
             taskGridView.Location = new Point(12, 12);
             taskGridView.Name = "taskGridView";
+            taskGridView.ReadOnly = true;
             taskGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             taskGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             taskGridView.ShowEditingIcon = false;
@@ -100,36 +101,33 @@
             // 
             // taskTextBox
             // 
-            taskTextBox.ForeColor = Color.Gray;
+            taskTextBox.ForeColor = Color.Black;
             taskTextBox.Location = new Point(12, 281);
             taskTextBox.Name = "taskTextBox";
+            taskTextBox.PlaceholderText = "Task Subject";
             taskTextBox.Size = new Size(481, 23);
             taskTextBox.TabIndex = 2;
-            taskTextBox.Text = "Task Subject";
-            taskTextBox.Enter += TaskTextBox_Enter;
-            taskTextBox.Leave += TaskTextBox_Leave;
             // 
             // taskDescriptionTextBox
             // 
-            taskDescriptionTextBox.ForeColor = Color.Gray;
+            taskDescriptionTextBox.ForeColor = Color.Black;
             taskDescriptionTextBox.Location = new Point(12, 310);
             taskDescriptionTextBox.Multiline = true;
             taskDescriptionTextBox.Name = "taskDescriptionTextBox";
+            taskDescriptionTextBox.PlaceholderText = "Description";
             taskDescriptionTextBox.Size = new Size(481, 122);
             taskDescriptionTextBox.TabIndex = 3;
-            taskDescriptionTextBox.Text = "Description";
-            taskDescriptionTextBox.Enter += TaskDescriptionTextBox_Enter;
-            taskDescriptionTextBox.Leave += TaskDescriptionTextBox_Leave;
             // 
             // dueDatePicker
             // 
-            dueDatePicker.CustomFormat = "MM/dd/yyyy hh:mm tt";
+            dueDatePicker.CustomFormat = "MM/dd/yyyy";
+            dueDatePicker.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             dueDatePicker.Format = DateTimePickerFormat.Custom;
             dueDatePicker.Location = new Point(510, 281);
             dueDatePicker.Name = "dueDatePicker";
-            dueDatePicker.RightToLeft = RightToLeft.No;
-            dueDatePicker.Size = new Size(278, 23);
+            dueDatePicker.Size = new Size(278, 29);
             dueDatePicker.TabIndex = 5;
+            dueDatePicker.Value = new DateTime(2024, 4, 16, 0, 0, 0, 0);
             // 
             // errorLabel
             // 

@@ -12,43 +12,12 @@ namespace Planner.UI
             LoadDataTable();
         }
 
-        private void TaskTextBox_Enter(object sender, EventArgs e)
-        {
-            if (taskTextBox.Text == "Task Subject")
-            {
-                taskTextBox.Text = string.Empty;
-                taskTextBox.ForeColor = Color.Black;
-            }
-        }
-        private void TaskTextBox_Leave(object sender, EventArgs e)
-        {
-            if (taskTextBox.Text == string.Empty)
-            {
-                taskTextBox.Text = "Task Subject";
-                taskTextBox.ForeColor = Color.Gray;
-            }
-        }
-        private void TaskDescriptionTextBox_Enter(object sender, EventArgs e)
-        {
-            if (taskDescriptionTextBox.Text == "Description")
-            {
-                taskDescriptionTextBox.Text = string.Empty;
-                taskDescriptionTextBox.ForeColor = Color.Black;
-            }
-        }
-        private void TaskDescriptionTextBox_Leave(object sender, EventArgs e)
-        {
-            if (taskDescriptionTextBox.Text == string.Empty)
-            {
-                taskDescriptionTextBox.Text = "Description";
-                taskDescriptionTextBox.ForeColor = Color.Gray;
-            }
-        }
         private void LoadDataTable()
         {
             try
             {
                 taskGridView.DataSource = FunctionLibrary.LoadTableData();
+                taskGridView.Columns[2].Visible = false;
                 taskGridView.Refresh();
             }
             catch (Exception e)
@@ -67,10 +36,6 @@ namespace Planner.UI
         }
         private void ResetTextBoxes()
         {
-            taskDescriptionTextBox.Text = "Description";
-            taskDescriptionTextBox.ForeColor = Color.Gray;
-            taskTextBox.Text = "Task Subject";
-            taskTextBox.ForeColor = Color.Gray;
             taskTextBox.ReadOnly = false;
         }
 
@@ -176,7 +141,7 @@ namespace Planner.UI
             {
                 return;
             }
-            dueDatePicker.Value = dateVal;
+            dueDatePicker.Value = dateVal.Date;
 
             taskDescriptionTextBox.Text = row.Cells[2].Value.ToString() ?? string.Empty;
             taskDescriptionTextBox.ForeColor = Color.Black;
@@ -186,7 +151,7 @@ namespace Planner.UI
         private void ClearButton_Click(object sender, EventArgs e)
         {
             ResetTextBoxes();
-            dueDatePicker.Value = DateTime.Now;
+            dueDatePicker.Value = DateTime.Now.Date;
         }
 
         private void Planner_FormClosing(object sender, FormClosingEventArgs e)

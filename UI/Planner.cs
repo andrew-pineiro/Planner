@@ -16,6 +16,7 @@ namespace Planner.UI
         {
             try
             {
+                //TODO(#3): Add cell coloring for tasks that are past due
                 taskGridView.DataSource = FunctionLibrary.LoadTableData();
                 taskGridView.Columns[2].Visible = false;
                 taskGridView.Refresh();
@@ -36,6 +37,7 @@ namespace Planner.UI
         }
         private void ResetTextBoxes()
         {
+            //TODO: Cleanup ReadOnly code to get rid of ResetTextBoxes() method
             taskTextBox.ReadOnly = false;
         }
 

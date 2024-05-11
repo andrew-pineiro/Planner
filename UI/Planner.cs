@@ -37,7 +37,6 @@ namespace Planner.UI
         }
         private void ResetUI()
         {
-            //TODO(#6): Cleanup ReadOnly code to get rid of ResetTextBoxes()()
             taskTextBox.ReadOnly = false;
             dueDatePicker.Value = DateTime.Now.Date;
             RemoveErrorMessage();

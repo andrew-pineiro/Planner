@@ -11,7 +11,18 @@ namespace Planner.UI
             InitializeComponent();
             LoadDataTable();
         }
-
+        private void TaskGridView_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (!DateTime.TryParse(taskGridView.Rows[e.RowIndex].Cells[1].Value.ToString(), out DateTime dueDate))
+            {
+                return;
+            }
+            if(dueDate.CompareTo(DateTime.Now) < 0) {
+                //TODO: clean up the color scheme (its ugly)
+                taskGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Red;
+                taskGridView.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.White;
+            }
+        }
         private void LoadDataTable()
         {
             try
@@ -19,6 +30,9 @@ namespace Planner.UI
                 //TODO(#5): Add cell coloring for tasks that are past due
                 taskGridView.DataSource = FunctionLibrary.LoadTableData();
                 taskGridView.Columns[2].Visible = false;
+                taskGridView.RowPrePaint 
+                    += new DataGridViewRowPrePaintEventHandler(
+                        TaskGridView_RowPrePaint);
                 taskGridView.Refresh();
             }
             catch (Exception e)

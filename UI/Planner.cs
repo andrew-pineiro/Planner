@@ -27,7 +27,6 @@ namespace Planner.UI
         {
             try
             {
-                //TODO(#5): Add cell coloring for tasks that are past due
                 taskGridView.DataSource = FunctionLibrary.LoadTableData();
                 taskGridView.Columns[2].Visible = false;
                 taskGridView.RowPrePaint 

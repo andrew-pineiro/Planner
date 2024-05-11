@@ -35,10 +35,13 @@ namespace Planner.UI
         {
             errorLabel.Text = string.Empty;
         }
-        private void ResetTextBoxes()
+        private void ResetUI()
         {
             //TODO(#6): Cleanup ReadOnly code to get rid of ResetTextBoxes()()
             taskTextBox.ReadOnly = false;
+            dueDatePicker.Value = DateTime.Now.Date;
+            RemoveErrorMessage();
+            LoadDataTable();
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -63,9 +66,7 @@ namespace Planner.UI
                 throw new Exception(returnVal.Message);
             }
 
-            RemoveErrorMessage();
-            ResetTextBoxes();
-            LoadDataTable();
+            ResetUI();
         }
 
         private void CompleteButton_Click(object sender, EventArgs e)
@@ -96,9 +97,7 @@ namespace Planner.UI
                 }
 
             }
-            RemoveErrorMessage();
-            ResetTextBoxes();
-            LoadDataTable();
+            ResetUI();
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -121,9 +120,7 @@ namespace Planner.UI
                     throw new Exception(returnVal.Message);
                 }
             }
-            RemoveErrorMessage();
-            ResetTextBoxes();
-            LoadDataTable();
+            ResetUI();
         }
 
         private void TaskGridView_Click(object sender, EventArgs e)
@@ -136,7 +133,6 @@ namespace Planner.UI
             DataGridViewRow row = taskGridView.SelectedRows[0];
 
             taskTextBox.Text = row.Cells[0].Value.ToString() ?? string.Empty;
-            taskTextBox.ForeColor = Color.Black;
             taskTextBox.ReadOnly = true;
 
             if (!DateTime.TryParse(row.Cells[1].Value.ToString() ?? string.Empty, out DateTime dateVal))
@@ -146,14 +142,12 @@ namespace Planner.UI
             dueDatePicker.Value = dateVal.Date;
 
             taskDescriptionTextBox.Text = row.Cells[2].Value.ToString() ?? string.Empty;
-            taskDescriptionTextBox.ForeColor = Color.Black;
             taskDescriptionTextBox.Focus();
         }
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
-            ResetTextBoxes();
-            dueDatePicker.Value = DateTime.Now.Date;
+            ResetUI();
         }
 
         private void Planner_FormClosing(object sender, FormClosingEventArgs e)

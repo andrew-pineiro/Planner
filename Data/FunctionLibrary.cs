@@ -7,6 +7,7 @@ namespace Planner.Data
 {
     public static class FunctionLibrary
     {
+        public static char[] InvalidChars { get; set; } = ['@', '\\', '/', ',', '&'];
         private static string FilePath =>
             Environment.ExpandEnvironmentVariables(
                 ConfigurationManager.AppSettings["dataFile"] 
@@ -28,7 +29,7 @@ namespace Planner.Data
 
                 File.WriteAllLines(
                     FilePath, 
-                    new string[] { "Task,Due Date,Task Description,Completed" }
+                    ["Task,Due Date,Task Description,Completed"]
                     );
             }
 
@@ -69,7 +70,6 @@ namespace Planner.Data
         }
         public static ReturnModel SaveDataToCsv(TaskModel task, bool saveTask)
         {
-            char[] invalidChars = { '@', '\\', '/', ',', '&' };
             var newLines = new List<string>();
 
             // Read in all lines
@@ -96,16 +96,16 @@ namespace Planner.Data
 
             // Check for any invalid characters present in task subject or description
             
-            int titleIndex = task.Task.IndexOfAny(invalidChars);
+            int titleIndex = task.Task.IndexOfAny(InvalidChars);
             int descIndex = !string.IsNullOrEmpty(task.TaskDescription) 
-                                ? task.TaskDescription.IndexOfAny(invalidChars) : -1;
+                                ? task.TaskDescription.IndexOfAny(InvalidChars) : -1;
 
             if (titleIndex > -1 || descIndex > -1)
             {
-                var invalidChar = titleIndex > -1 ? task.Task[titleIndex] : task.TaskDescription![descIndex];
+                var InvalidChars = titleIndex > -1 ? task.Task[titleIndex] : task.TaskDescription![descIndex];
                 return new ReturnModel() { 
                     ReturnCode = Code.ERROR, 
-                    Message = $"Invalid character present: {invalidChar}" 
+                    Message = $"Invalid character present: {InvalidChars}" 
                 };
             }
 

@@ -18,7 +18,6 @@ namespace Planner.UI
                 return;
             }
             if(dueDate.CompareTo(DateTime.Now) < 0) {
-                //TODO(#10): clean up the color scheme (its ugly)
                 taskGridView.Rows[e.RowIndex].Cells[1].Style.BackColor = Color.Crimson;
                 
             }

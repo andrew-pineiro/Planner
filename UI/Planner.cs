@@ -19,8 +19,8 @@ namespace Planner.UI
             }
             if(dueDate.CompareTo(DateTime.Now) < 0) {
                 //TODO(#10): clean up the color scheme (its ugly)
-                taskGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Red;
-                taskGridView.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.White;
+                taskGridView.Rows[e.RowIndex].Cells[1].Style.BackColor = Color.Crimson;
+                
             }
         }
         private void LoadDataTable()
@@ -31,7 +31,7 @@ namespace Planner.UI
                 taskGridView.Columns[2].Visible = false;
                 taskGridView.RowPrePaint 
                     += new DataGridViewRowPrePaintEventHandler(
-                        TaskGridView_RowPrePaint);
+                        TaskGridView_RowPrePaint!);
                 taskGridView.Refresh();
             }
             catch (Exception e)
@@ -51,7 +51,10 @@ namespace Planner.UI
         private void ResetUI()
         {
             taskTextBox.ReadOnly = false;
+            taskTextBox.Text = "";
+            taskDescriptionTextBox.Text = "";
             dueDatePicker.Value = DateTime.Now.Date;
+
             RemoveErrorMessage();
             LoadDataTable();
         }
